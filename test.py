@@ -58,7 +58,7 @@ for entry in data:
             print(f"No data found for {entry['symbol']} on {sell_date}, skipping trade")
             break
         
-        if sell_price > buy_price:
+        if sell_price > buy_price *1.00001:
             profit = sell_price - buy_price
             print(f"Buy price: {buy_price}, Sell price: {sell_price}, Profit: {profit}", 'Percent Change', profit/buy_price * 100,  end = '\n')
             total_return += profit
@@ -67,14 +67,14 @@ for entry in data:
             #add to list of percent gains
             percent_gains.append(profit/buy_price)
 
-            trade_summary.append([entry['symbol'], buy_date, sell_date, buy_price, sell_price, profit/buy_price * 100, (datetime.datetime.strptime(sell_date, '%Y-%m-%d') - datetime.datetime.strptime(buy_date, '%Y-%m-%d')).days])
+            trade_summary.append([entry['symbol'], buy_date, sell_date, buy_price, sell_price, profit/buy_price, (datetime.datetime.strptime(sell_date, '%Y-%m-%d') - datetime.datetime.strptime(buy_date, '%Y-%m-%d')).days])
 
 
             break
         elif sell_price < buy_price * 0.94:
             loss = sell_price - buy_price
             print(f"Buy price: {buy_price}, Sell price: {sell_price}, Loss: {loss}", 'Percent Change', loss/buy_price * 100,  end = '\n')
-            trade_summary.append([entry['symbol'], buy_date, sell_date, buy_price, sell_price, loss/buy_price * 100, (datetime.datetime.strptime(sell_date, '%Y-%m-%d') - datetime.datetime.strptime(buy_date, '%Y-%m-%d')).days])
+            trade_summary.append([entry['symbol'], buy_date, sell_date, buy_price, sell_price, loss/buy_price, (datetime.datetime.strptime(sell_date, '%Y-%m-%d') - datetime.datetime.strptime(buy_date, '%Y-%m-%d')).days])
 
             total_return += loss
             negativeTrades += 1
@@ -118,7 +118,7 @@ print(f"Median loss per trade: {median_loss}")
 #save trade summary to txt
 with open('trade_summary.txt', 'w') as f:
     for trade in trade_summary:
-        f.write(f"{trade}\n")
+        f.write(str(trade).replace('[','').replace(']','').replace("'", "") + '\n')
 
 
 
